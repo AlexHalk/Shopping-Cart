@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+	<h1>Congrats! {{ user }}</h1>
+		
+	<div class="container">
+		<table class = "table table-striped">
+			<thead>
+				<tr>
+					<th>Products Bought:</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for key, product in quantity %}
+					<tr>
+						<td> {{ product.product }}</td>
+					</tr>
+				{% endfor %}  
+			</tbody>   
+		</table>
+
+		{% for flash_message in app.session.flashbag.get('notice') %}
+			<div class="flash-notice">
+				<strong>{{ flash_message }}</strong>
+			</div> <!--flashNotice-->
+		{% endfor %}
+
+		<div class="total_cost_container">
+			<p class="text-right">Total Cost: ${{ totalCostOfAllProducts }}</p>
+		</div> <!--End total_cost_container-->
+
+	</div> <!--End Container-->
+	<ul class="record_actions">
+	    <li>
+	        <a href="{{ path('product') }}">
+	            Go All The Way Back
+	        </a>
+	    </li>
+	</ul>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<h1 class="text-center"><u><i>Your Cart</i></u></h1>
+
+	<div class="container">
+
+        <div class="who_is_logged_in">
+            {% if user is null %}
+                <a href="{{ path ('fos_user_security_login') }}">Login</a>
+            {% else %}
+                <u>Hello<strong> {{ user }}</strong></u>
+            {% endif %}
+        </div>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Product</th>
+					<th>Quantity</th>
+					<th>Price Per Unit</th>    
+					<th>Remove Product</th>
+				</tr>
+			</thead>
+
+			<tbody>
+			{% for key, quantity in quantities %}  
+					<tr>
+						<td>{{ quantity.product }}</td> <!--Product-->
+						<td>
+							<input id="quantityId_{{ quantity.id }}" class="spinner" value="{{ quantity.quantity }}" style="width:30px">
+						</td> <!--Quantity-->
+						<td>${{ quantity.product.price|default('') }}</td> <!--Price-->   
+						<td>
+							<a href="{{ path('product_remove', {'id': quantity.product.id }) }}">
+								<button name="REMOVE" type="button" class="btn btn-danger" id="removeButton">
+									<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+								</button>
+							</a>
+						</td><!--Remove--> 
+					</tr>
+				{% endfor %}	  
+			</tbody>
+		</table> <!--top table-->
+
+			<div class="money-container">
+				<p class="text-right">Total Cost: ${{ totalCostOfAllProducts }}</p>
+			</div> <!--moneyContainer-->
+
+		{% for flash_message in app.session.flashbag.get('notice') %}
+			<div class="flash-notice">
+				<strong>{{ flash_message }}</strong>
+			</div> <!--flashNotice-->
+		{% endfor %}
+
+	</div> <!--container-->
+
+	<ul>
+	    <li>
+	        <a href="{{ path('product') }}">
+	            Add More Products
+	        </a>
+	    </li>
+		<li>
+			<a href="{{ path('product_bought') }}">
+				Buy These Products
+			</a>
+		</li>
+	</ul>
+
+<script type="text/javascript">
+ $(".spinner").spinner({ min: 1 });
+	$('input.spinner').on('spinstop', function(){
+		min: 0
+		console.log('spinner changed');
+		var $this = $(this);
+		var value = $('.spinner').val();
+		var id_value = $(this).attr('id').split("_")[1];
+		var request = $.ajax({
+			url: "{{ path('product_quantityUpdate') }}",
+			method: "POST",
+			data : {
+				quantity: this.value,
+				quantityId: id_value
+			}
+		}).done(function(result){
+			console.log('success', result);
+		}).error(function (xhr, ajaxOptions, thrownError) {
+       		console.log(xhr.status);
+      		console.log(xhr.responseText);
+       		console.log(thrownError);
+   		});
+	});
+</script>
+
+{% endblock %}
+
+

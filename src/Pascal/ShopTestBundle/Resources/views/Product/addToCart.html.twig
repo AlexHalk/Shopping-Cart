@@ -1,0 +1,57 @@
+
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<h1><u><i>Welcome to the Cart, Below you added these Products to the Cart</i></u></h1>
+
+	<div class="container">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Product</th>
+					<th>Quantity</th>
+					<th>Price Per Unit</th> 
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for key, cartValue in cartArray %}
+					<tr>
+						<td>{{ cartValue[0] }}</td> <!--Product-->
+						<td>{{ cartValue[1] }}</td> <!--Quantity-->
+						<td>${{ cartValue[2] }}</td> <!--Price Per Unit-->
+					</tr>
+				{% endfor %}	
+			</tbody>
+		</table> <!--top table-->
+
+		{% for flash_message in app.session.flashbag.get('notice') %}
+			<div class="flash-notice">
+				{{ flash_message }}
+			</div> <!--flashNotice-->
+		{% endfor %}
+
+	</div> <!--container-->
+
+			<ul>
+				<li>
+					<a href="{{ path('product_showCart') }}">
+						View Cart
+					</a>
+				</li>
+				<li>
+					<a href="{{ path('product_bought') }}">
+						Buy These Products
+					</a>
+				</li>
+			    <li>
+			        <a href="{{ path('product') }}">
+			            Add More Products
+			        </a>
+			    </li>
+			</ul>
+
+
+{% endblock %}
+

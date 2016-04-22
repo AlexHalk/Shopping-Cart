@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+	<h1>Congrats!</h1>
+		
+	<div class="container">
+		
+			<p> The Product: <strong>{{ entity.name }}</strong> was removed.</p>
+
+
+	</div> <!--End Container-->
+	<ul class="record_actions">
+	    <li>
+	        <a href="{{ path('product') }}">
+	            Go All The Way Back
+	        </a>
+	    </li>
+	    <li>
+	  		<a href="{{ path('product_showCart') }}">
+	  			View Current Cart 
+	    	</a>
+	    </li>
+		<li>
+	  		<a href="{{ path('product_addToCart', { 'id': entity.id-1 }) }}">
+	  			Go Back to Cart
+	    	</a>
+	    </li>
+	</ul>
+
+{% endblock %}

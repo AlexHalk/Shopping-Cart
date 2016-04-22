@@ -1,0 +1,108 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+    <h1 class="text-center">Product List</h1>
+
+<div class="container">
+
+        <div class="who_is_logged_in">
+            {% if user is null %}
+                <a href="{{ path ('fos_user_security_login') }}">Login</a>
+            {% else %}
+                Hello <strong> {{ user }}, </strong> 
+                <br> <a href = "{{ path('fos_user_security_logout') }}">Logout</a> </br>
+            {% endif %}
+        </div>
+
+        <div class="CheckOut-RightText">
+            <strong><p class="text-right"> <a href="{{ path('product_showCart') }}">Proceed to Checkout</p></a></strong>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li role="navigation" class="active">
+                <a data-toggle="tab" role="tab" aria-controls="tab1" href="#tab1">Category: Food</a>
+            </li>
+            <li role="navigation">
+                <a data-toggle="tab" role="tab" aria-controls="tab2" href="#tab2">Category: Other</a>
+            </li>  
+        </ul>
+
+ <div class="tab-content">
+    {% for category in categories %}
+
+            {% if category.categoryName == 'Food' %}
+                <div role="tabpanel" class="tab-pane fade in active" id="tab1" >
+            {% else %}
+                <div role="tabpanel" class="tab-pane fade" id="tab2" >
+            {% endif %}           
+
+                    <table class="table table-striped table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                {% if is_granted("ROLE_ADMIN") %}
+                                    <th>Id</th>
+                                {% endif %}
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entity in category.products %}
+                                <tr>
+                                    {% if is_granted("ROLE_ADMIN") %}
+                                        <td><a href="{{ path('product_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                                    {% endif %}
+                                    <td>{{ entity.name }}</td>
+                                    <td>${{ entity.price }}</td>
+                                    {% for description in entity.descriptions %}
+                                        <td>{{ description.productDesciption }}</td>
+                                    {% endfor %}
+                                    <td>
+                                        <ul class="list-inline">
+                                            <li>
+                                                <a href="{{ path('product_addToCart', { 'id': entity.id }) }}">Add Product To Cart</a>
+                                            </li>
+                                            {% if is_granted("ROLE_ADMIN") %}
+                                                <li>
+                                                    ---
+                                                </li>
+                                                <li>
+                                                    <a href = "{{ path('product_edit', { 'id': entity.id }) }}">EDIT</a>
+                                                </li>
+                                                <li>
+                                                    ---
+                                                </li>
+                                                <li>
+                                                    <a href = "{{ path('product_delete', { 'id': entity.id }) }}">DELETE</a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endfor %}   
+                        </tbody>
+                    </table>
+
+                </div><!-- Ends ifelse div -->
+
+    {% endfor %}
+
+        {% for flash_message in app.session.flashbag.get('notice') %}
+            <div class="flash-notice">
+                <strong>{{ flash_message }}</strong>
+            </div> <!--flashNotice-->
+        {% endfor %}
+
+ </div><!-- Ends tab-content -->
+
+{% if is_granted("ROLE_ADMIN") %}
+    <a href = "{{ path('product_viewAdmin') }}">Admin View</a>
+{% endif %}
+
+</div><!--Ends container-->
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Product creation</h1>
+
+    {{ form(form) }}
+
+<ul class="record_actions">
+	{% if is_granted("ROLE_ADMIN") %} {#  ------------------------ THESE MAY EVENTUALLY PROVE TO BE REDUNDENT ------------------------ #}
+		<li>
+			<a href = "{{ path('product_viewAdmin') }}">
+				Admin View
+			<a/>
+		</li>
+	{% endif %}
+    <li>
+        <a href="{{ path('product') }}">
+            Product List
+        </a>
+    </li>
+</ul>
+{% endblock %}

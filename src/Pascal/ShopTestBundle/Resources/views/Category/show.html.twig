@@ -1,0 +1,35 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Category</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Categoryname</th>
+                <td>{{ entity.categoryName }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('category') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('category_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% if is_granted("ROLE_ADMIN") %}
+    <a href = "{{ path('product_viewAdmin') }}">Admin View</a>
+{% endif %}
+{% endblock %}

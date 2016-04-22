@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Description</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Product Description</th>
+                <td>{{ entity.productDesciption }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<ul class="record_actions">
+    {% if is_granted("ROLE_ADMIN") %}    
+        <li>
+            <a href = "{{ path('product_viewAdmin') }}">
+                Admin View
+            </a>
+        </li>
+        <li>
+            <a href = "{{ path('product') }}">
+                Product List
+            </a>
+        </li>
+    {% endif %}
+    <li>
+        <a href="{{ path('description') }}">
+            View All Descriptions
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('description_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+
+{% if is_granted("ROLE_ADMIN") %}
+    <a href = "{{ path('product_viewAdmin') }}">Admin View</a>
+{% endif %}
+
+{% endblock %}
