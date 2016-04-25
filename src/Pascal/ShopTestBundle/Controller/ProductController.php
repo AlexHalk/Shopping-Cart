@@ -300,6 +300,7 @@ class ProductController extends Controller {
      * @Template()
      */
     public function addToCartAction(Request $request, $id) {
+        //THIS WORKS
 
         $em = $this->getDoctrine()->getManager();
 
@@ -334,24 +335,25 @@ class ProductController extends Controller {
                 } //Ends foreach if
             } //Ends foreach
 
-        if (!$foundProduct) {
-                // This if condition is executed if a cart exists for the user and the product being added is not already in their cart.
-            $quantity = new Quantity();
-            $quantity->setQuantity(1);
-            $quantity->setProduct($productBeingAddedToCart);
-            $cart->addQuantity($quantity);
-            $quantity->setUserCart($cart);               
-            $em->persist($productBeingAddedToCart);
-            $em->persist($quantity);            
-            $cart->setTimestamp(new \DateTime());
-            $cart->setSubmitted(false);
-            $cart->setUser($this->getUser());
-        } 
+            if (!$foundProduct) {
+                    // This if condition is executed if a cart exists for the user and the product being added is not already in their cart.
+                $quantity = new Quantity();
+                $quantity->setQuantity(1);
+                $quantity->setProduct($productBeingAddedToCart);
+                $cart->addQuantity($quantity);
+                $quantity->setUserCart($cart);               
+                $em->persist($productBeingAddedToCart);
+                $em->persist($quantity);            
+                $cart->setTimestamp(new \DateTime());
+                $cart->setSubmitted(false);
+                $cart->setUser($this->getUser());
+            }
+
             $em->persist($cart);
             $em->flush();
             $this->addFlash('notice', 'The Product: '.$productBeingAddedToCart->getName().' Has Been Added To Your Cart!');
-        } 
-// The look and feel of the if statements are awkard...Try to change/fix.
+        }
+
         return $this->redirectToRoute('product');
     }
 
