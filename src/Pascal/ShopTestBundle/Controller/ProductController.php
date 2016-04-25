@@ -45,7 +45,7 @@ class ProductController extends Controller {
     }
 
     /**
-     * This function relates a newly created product.
+     * This function relates a newly created product and fetches the product form to be used to create a new product.
      *
      * @Route("/", name="product_create")
      * @Method("POST")
@@ -291,9 +291,9 @@ class ProductController extends Controller {
 
     /** 
      * This function will add a selected product to the users cart. If no one is logged in then no cart can be created.
-     *    Once a user is logged in then once they select a product to add, a new shopping cart is created for them. 
+     *    Once a user is logged in they select a product to add, a new shopping cart is created for them. 
      *    At this point, if the user adds the same product then the quantity field is increased by '1', otherwise, the
-     *    selected product is added normally to their existing shopping cart.
+     *    newly selected product is added normally to their existing shopping cart.
      *
      * @Route("/{id}/addToCart", name="product_addToCart")
      * @Method("GET")
@@ -315,12 +315,12 @@ class ProductController extends Controller {
             $cart = new UserCart();
             $quantity = new Quantity();
             $cart->setTimestamp(new \DateTime()); // Set Time Product was Added
-            $quantity->setQuantity(1);   // Set Quantity Purchased
-            $cart->setSubmitted(false); // Set Submitted
-            $cart->setUser($this->getUser());  // Sets the User ONCE
-            $quantity->setProduct($productBeingAddedToCart);
-            $cart->addQuantity($quantity);    //  Add Quantity ONCE
-            $quantity->setUserCart($cart);   //   Create a UserCart ONCE                
+            $quantity->setQuantity(1);   // Set Quantity Purchased, standard unit of '1'
+            $cart->setSubmitted(false); // Set Submitted to false as they have yet to buy the products
+            $cart->setUser($this->getUser());  // Sets the User to their cart id
+            $quantity->setProduct($productBeingAddedToCart); // Places the product in the Users Cart
+            $cart->addQuantity($quantity);    //  Add Quantity of '1'
+            $quantity->setUserCart($cart);   //   Sets the cart id to corresponding quantity id's               
             $em->persist($productBeingAddedToCart);
             $em->persist($cart);
             $em->persist($quantity);
@@ -328,6 +328,8 @@ class ProductController extends Controller {
             $this->addFlash('notice', 'A Cart Has Been Created & The Product: '.$productBeingAddedToCart->getName().' Has Been Added To Your Cart!');
         }
         else {
+            // This else portion is executed if a user already has a cart. Within it, if a product is already in their cart,
+                // a check is performed to simply increase the quantity of that product by '1'. 
             $getEverythingInCart = $cart->getQuantities();
             $foundProduct = false;
             foreach ($getEverythingInCart as $key => $value) {
@@ -344,17 +346,18 @@ class ProductController extends Controller {
             } //Ends foreach
 
             if (!$foundProduct) {
-                // Add a New Product to the Cart:
+                // This if condition is executed if a cart exists for the user and the product being added is not already in their cart.
+                    // SAME CODE AS ABOVE...WRITE EVERYTHING TWICE...BAD...MAKE IT DRY...
                 $quantity = new Quantity();
-                $quantity->setQuantity(1);   // Set Quantity Purchased
+                $quantity->setQuantity(1);
                 $quantity->setProduct($productBeingAddedToCart);
-                $cart->addQuantity($quantity);    //  Add Quantity ONCE
-                $quantity->setUserCart($cart);   //   Create a UserCart ONCE                
+                $cart->addQuantity($quantity);
+                $quantity->setUserCart($cart);               
                 $em->persist($productBeingAddedToCart);
                 $em->persist($quantity);            
-                $cart->setTimestamp(new \DateTime()); // Set Time Product was Added
-                $cart->setSubmitted(false); // Set Submitted
-                $cart->setUser($this->getUser());  // Sets the User ONCE
+                $cart->setTimestamp(new \DateTime());
+                $cart->setSubmitted(false);
+                $cart->setUser($this->getUser());
             }
 
             $em->persist($cart);
@@ -368,7 +371,7 @@ class ProductController extends Controller {
     /**
      * This function will only show what the user has added to their shopping cart. 
      *    This page is not accessable without a cart in existance. In showCart.html.twig for Product Entity
-     *    the option to increase or decrease the quantity of a product is available using jQuery/Ajax. 
+     *    the option to increase or decrease the quantity of a product is available using an Ajax/jQuery spinner. 
      * 
      * @Route("/showCart", name="product_showCart")
      * @METHOD("GET")
@@ -403,7 +406,7 @@ class ProductController extends Controller {
     }
 
     /**
-     * This function updates the quantity field using ajax/jQuery request from showCart twig file
+     * This function updates the quantity field using the Ajax/jQuery request from showCart twig file
      *
      * @Route("/quantityUpdate", name="product_quantityUpdate")
      * @Method("POST")
@@ -424,7 +427,7 @@ class ProductController extends Controller {
 
     /**
      * This function simply displays a page showing all of the products bought. 
-     *    Once a user reaches this page, their shopping cart is emptied.
+     *    Once a user reaches this page, their shopping cart is emptied (computed as submitted is now true).
      *
      * @Route("/bought", name="product_bought")
      * @Method("GET")
@@ -451,6 +454,7 @@ class ProductController extends Controller {
         $cart->setSubmitted(true);
         $sub = $cart->getSubmitted();   
 
+            // Sends the bought products to the database.
         if ($sub == true) {
             $em->persist($cart);
             $em->flush();         
@@ -464,10 +468,10 @@ class ProductController extends Controller {
     }
 
     /**
-     * This function is only accessable with an Admin login. In viewAdmin.html.twig for the Product Entity
+     * This page is only accessable with an Admin login. In viewAdmin.html.twig for the Product Entity
      *    two tables are shown: (1) for bought products (where submitted is true),  
      *    and (2) for shopping carts currently in use (where submitted is false). The Admin has the ability to edit or delete the
-     *    product from a users cart as well as the ability to create a new product all together.  
+     *    product from a users cart as well as the ability to have access to all CRUD features of every entity  
      *
      * @Route("/viewAdmin", name="product_viewAdmin")
      * @Method("GET")
