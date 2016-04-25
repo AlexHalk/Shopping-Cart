@@ -291,7 +291,7 @@ class ProductController extends Controller {
 
     /** 
      * This function will add a selected product to the users cart. If no one is logged in then no cart can be created.
-     *    Once a user is logged in they select a product to add, a new shopping cart is created for them. 
+     *    Once a user is logged in, they select a product to add and a new shopping cart is created for them. 
      *    At this point, if the user adds the same product then the quantity field is increased by '1', otherwise, the
      *    newly selected product is added normally to their existing shopping cart.
      *
@@ -313,22 +313,11 @@ class ProductController extends Controller {
 
         if (is_null($cart) || $cart->getSubmitted(true)) {
             $cart = new UserCart();
-            $quantity = new Quantity();
-            $cart->setTimestamp(new \DateTime()); // Set Time Product was Added
-            $quantity->setQuantity(1);   // Set Quantity Purchased, standard unit of '1'
-            $cart->setSubmitted(false); // Set Submitted to false as they have yet to buy the products
-            $cart->setUser($this->getUser());  // Sets the User to their cart id
-            $quantity->setProduct($productBeingAddedToCart); // Places the product in the Users Cart
-            $cart->addQuantity($quantity);    //  Add Quantity of '1'
-            $quantity->setUserCart($cart);   //   Sets the cart id to corresponding quantity id's               
-            $em->persist($productBeingAddedToCart);
-            $em->persist($cart);
-            $em->persist($quantity);
-            $em->flush();
-            $this->addFlash('notice', 'A Cart Has Been Created & The Product: '.$productBeingAddedToCart->getName().' Has Been Added To Your Cart!');
+            $this->addFlash('notice', 'A Cart Has Been Created!');
         }
-        else {
-            // This else portion is executed if a user already has a cart. Within it, if a product is already in their cart,
+
+        if (!is_null($cart)) {
+            // This is executed if a user already has a cart. Within it, if a product is already in their cart,
                 // a check is performed to simply increase the quantity of that product by '1'. 
             $getEverythingInCart = $cart->getQuantities();
             $foundProduct = false;
@@ -345,26 +334,24 @@ class ProductController extends Controller {
                 } //Ends foreach if
             } //Ends foreach
 
-            if (!$foundProduct) {
+        if (!$foundProduct) {
                 // This if condition is executed if a cart exists for the user and the product being added is not already in their cart.
-                    // SAME CODE AS ABOVE...WRITE EVERYTHING TWICE...BAD...MAKE IT DRY...
-                $quantity = new Quantity();
-                $quantity->setQuantity(1);
-                $quantity->setProduct($productBeingAddedToCart);
-                $cart->addQuantity($quantity);
-                $quantity->setUserCart($cart);               
-                $em->persist($productBeingAddedToCart);
-                $em->persist($quantity);            
-                $cart->setTimestamp(new \DateTime());
-                $cart->setSubmitted(false);
-                $cart->setUser($this->getUser());
-            }
-
+            $quantity = new Quantity();
+            $quantity->setQuantity(1);
+            $quantity->setProduct($productBeingAddedToCart);
+            $cart->addQuantity($quantity);
+            $quantity->setUserCart($cart);               
+            $em->persist($productBeingAddedToCart);
+            $em->persist($quantity);            
+            $cart->setTimestamp(new \DateTime());
+            $cart->setSubmitted(false);
+            $cart->setUser($this->getUser());
+        } 
             $em->persist($cart);
             $em->flush();
             $this->addFlash('notice', 'The Product: '.$productBeingAddedToCart->getName().' Has Been Added To Your Cart!');
-        }
-
+        } 
+// The look and feel of the if statements are awkard...Try to change/fix.
         return $this->redirectToRoute('product');
     }
 
