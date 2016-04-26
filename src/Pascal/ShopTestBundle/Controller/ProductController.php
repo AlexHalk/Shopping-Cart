@@ -300,7 +300,6 @@ class ProductController extends Controller {
      * @Template()
      */
     public function addToCartAction(Request $request, $id) {
-        //THIS WORKS
 
         $em = $this->getDoctrine()->getManager();
 
