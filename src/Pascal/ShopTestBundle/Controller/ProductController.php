@@ -311,28 +311,27 @@ class ProductController extends Controller {
             return $this->redirectToRoute('product');
         }
 
-        if (is_null($cart) || $cart->getSubmitted(true)) {
+        if (is_null($cart)) {
             $cart = new UserCart();
             $this->addFlash('notice', 'A Cart Has Been Created!');
         }
 
-        if (!is_null($cart)) {
-            // This is executed if a user already has a cart. Within it, if a product is already in their cart,
-                // a check is performed to simply increase the quantity of that product by '1'. 
-            $getEverythingInCart = $cart->getQuantities();
-            $foundProduct = false;
-            foreach ($getEverythingInCart as $key => $value) {
-                $getAllProductNamesInCart = $value->getProduct()->getName();
-                $getAllProductsInCartENTITY = $value->getProduct();
-                $getQuantityOfProduct = $value->getQuantity();
-                if ($getAllProductNamesInCart === $productBeingAddedToCart->getName()) {
-                    $foundProduct = true;
-                    // We found the product! Update the Quantity of the Product in the Cart:
-                    $value->setQuantity($getQuantityOfProduct + 1);
-                    $em->persist($value);
-                    break;
-                } //Ends foreach if
-            } //Ends foreach
+        // The below is executed if a user already has a cart. Within it, if a product is already in their cart,
+            // a check is performed to simply increase the quantity of that product by '1'. 
+        $getEverythingInCart = $cart->getQuantities();
+        $foundProduct = false;
+        foreach ($getEverythingInCart as $key => $value) {
+            $getAllProductNamesInCart = $value->getProduct()->getName();
+            $getAllProductsInCartENTITY = $value->getProduct();
+            $getQuantityOfProduct = $value->getQuantity();
+            if ($getAllProductNamesInCart === $productBeingAddedToCart->getName()) {
+                $foundProduct = true;
+                // We found the product! Update the Quantity of the Product in the Cart:
+                $value->setQuantity($getQuantityOfProduct + 1);
+                $em->persist($value);
+                break;
+            } //Ends foreach if
+        } //Ends foreach
 
         if (!$foundProduct) {
                 // This if condition is executed if a cart exists for the user and the product being added is not already in their cart.
@@ -347,11 +346,11 @@ class ProductController extends Controller {
             $cart->setSubmitted(false);
             $cart->setUser($this->getUser());
         } 
-            $em->persist($cart);
-            $em->flush();
-            $this->addFlash('notice', 'The Product: '.$productBeingAddedToCart->getName().' Has Been Added To Your Cart!');
-        } 
-// The look and feel of the if statements are awkard...Try to change/fix.
+
+        $em->persist($cart);
+        $em->flush();
+        $this->addFlash('notice', 'The Product: '.$productBeingAddedToCart->getName().' Has Been Added To Your Cart!');
+
         return $this->redirectToRoute('product');
     }
 
