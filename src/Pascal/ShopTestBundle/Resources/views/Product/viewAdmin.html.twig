@@ -45,6 +45,10 @@
 		</ul>
 	</div>
 
+	<div class="form-group pull-right">
+	  <input type="text" class = "input" placeholder="Search">
+	</div>
+
 	<div class = "col-md-6">
 	<h2 class = "sub-header">Bought</h2>
 		<div class = "table-responsive">
@@ -60,7 +64,7 @@
 						<th>Delete Cart</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class = "cartInfos">
 					{% for userInfo in allOfTheCarts %}
 						{% for productInfo in userInfo.quantities %}
 							{% if userInfo.submitted == true %}
@@ -99,11 +103,11 @@
 		</div>
 	</div>
 
-	
 	<div class = "col-md-6">
 	<h2 class = "sub-header">In Use</h2>
 		<div class = "table-responsive">
-			<table class = "table table-striped table-condensed table-hover">
+			<span class="counter pull-right"></span>
+			<table class = "table table-striped table-condensed table-hover results">
 				<thead>
 					<tr>
 						<th>User Cart Id's</th>
@@ -115,7 +119,7 @@
 						<th>Delete Cart</th>
 					</tr>
 				</thead>					
-				<tbody>
+				<tbody class = "cartInfos">
 					{% for userInfo in allOfTheCarts %}
 						{% for productInfo in userInfo.quantities %}
 							{% if userInfo.submitted == false %}
@@ -156,8 +160,20 @@
 
 	</div> <!-- ends main container -->
 
+<script type="text/javascript">
+	var lis = $(".cartInfos tr");
+	var list = $.makeArray(lis.map(function(k, v) {
+	    			return $(v).text().toLowerCase();
+				}));
 
+	$(".input").keyup(function() {
+	    var userInput = $(this).val();
+	    lis.each(function(index, value) {
+	        $(value).toggle(list[index].indexOf(userInput) >= 0);
+	    });
+	});
 
+</script>
 
 {% endblock %}
 
