@@ -3,19 +3,21 @@
 {% block body -%}
     <h1>UserCart</h1>
 
-    <table class="record_properties">
+    <table class="table table-bordered">
+        <thead>
+            <th> ID </th>
+            <th> Submitted </th>
+        </thead>
         <tbody>
             <tr>
-                <th>Id</th>
                 <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Timestamp</th>
-               {# <td>{{ entity.timestamp }}</td>  #}
-            </tr>
-            <tr>
-                <th>Submitted</th>
-                <td>{{ entity.submitted }}</td>
+                <td> 
+                    {% if entity.submitted == '1' %}
+                        YES
+                    {% else %}
+                        <strong> NO </strong>
+                    {% endif %} 
+                </td>
             </tr>
         </tbody>
     </table>

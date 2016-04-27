@@ -95,6 +95,7 @@ class UserController extends Controller
      */
     public function newAction()
     {
+     //create a new user DOES NOTHING ------------------------------------------------------------------------------------------------------FIX
         $entity = new User();
         $form   = $this->createCreateForm($entity);
 
@@ -138,6 +139,8 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
+
+        //EDIT DOES NOTHING ------------------------------------------------------------------------------------------------------FIX
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PascalShopTestBundle:User')->find($id);

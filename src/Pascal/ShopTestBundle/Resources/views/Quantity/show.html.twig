@@ -3,14 +3,14 @@
 {% block body -%}
     <h1>Quantity</h1>
 
-    <table class="record_properties">
+    <table class="table table-striped">
+        <thead>
+            <th> ID </th>
+            <th> Quantity </th>
+        </thead>
         <tbody>
             <tr>
-                <th>Id</th>
                 <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Quantity</th>
                 <td>{{ entity.quantity }}</td>
             </tr>
         </tbody>

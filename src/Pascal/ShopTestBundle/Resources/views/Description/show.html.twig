@@ -3,14 +3,14 @@
 {% block body -%}
     <h1>Description</h1>
 
-    <table class="record_properties">
+    <table class="table table-striped">
+        <thead>
+            <th>Id</th>
+            <th>Description</th>
+        </thead>
         <tbody>
             <tr>
-                <th>Id</th>
                 <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Product Description</th>
                 <td>{{ entity.productDesciption }}</td>
             </tr>
         </tbody>
@@ -41,9 +41,5 @@
     </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
-
-{% if is_granted("ROLE_ADMIN") %}
-    <a href = "{{ path('product_viewAdmin') }}">Admin View</a>
-{% endif %}
 
 {% endblock %}

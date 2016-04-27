@@ -16,7 +16,7 @@ class QuantityType extends AbstractType
     {
         $builder
             ->add('quantity')
-            ->add('userCart')
+            // ->add('userCart')
             ->add('product')
         ;
     }

@@ -3,6 +3,20 @@
 {% block body -%}
     <h1>Description list</h1>
 
+    <ul>
+        <li>
+            <a href="{{ path('description_new') }}"> <strong>
+                Create a new entry </strong>
+            </a>
+        </li>
+        {% if is_granted("ROLE_ADMIN") %}
+            <li> <strong>
+                    <a href = "{{ path('product_viewAdmin') }}">Admin View</a>
+                </strong>
+            </li>
+        {% endif %}
+    </ul>
+
     <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -33,17 +47,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('description_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-
-{% if is_granted("ROLE_ADMIN") %}
-    <a href = "{{ path('product_viewAdmin') }}">Admin View</a>
-{% endif %}
 
     {% endblock %}

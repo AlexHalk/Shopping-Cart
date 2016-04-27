@@ -172,11 +172,11 @@ class UserCart
         return $this->quantities;
     }
 
-    /**
-     * Converts Quantities to a Viewable String
-     */
-    public function __toString() 
-    {
-        return $this->quantities;
-    }
+    // /**
+    //  * Converts Quantities to a Viewable String
+    //  */
+    // public function __toString() 
+    // {
+    //     return $this->timestamp();
+    // }
 }
