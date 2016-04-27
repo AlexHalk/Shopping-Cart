@@ -20,18 +20,23 @@
         </div>
 
         <ul class="nav nav-tabs">
-            <li role="navigation" class="active">
-                <a data-toggle="tab" role="tab" aria-controls="tab1" href="#tab1">Category: Food</a>
-            </li>
-            <li role="navigation">
-                <a data-toggle="tab" role="tab" aria-controls="tab2" href="#tab2">Category: Other</a>
-            </li>  
-        </ul>
+            {% for category in categories %}
+                {% if category.id == 1 %}
+                    <li role="navigation" class="active">
+                        <a data-toggle="tab" role="tab" aria-controls="tab1" href="#tab1">Category: {{ category.categoryName }}</a>
+                    </li>
+                {% else %}
+                    <li role="navigation">
+                        <a data-toggle="tab" role="tab" aria-controls="tab2" href="#tab2">Category: {{ category.categoryName }}</a>
+                    </li>  
+                {% endif %}
+            {% endfor %}
+        </ul>   
 
  <div class="tab-content">
     {% for category in categories %}
 
-            {% if category.categoryName == 'Food' %}
+            {% if category.id == 1 %}
                 <div role="tabpanel" class="tab-pane fade in active" id="tab1" >
             {% else %}
                 <div role="tabpanel" class="tab-pane fade" id="tab2" >

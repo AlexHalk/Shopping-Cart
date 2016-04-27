@@ -11,7 +11,6 @@
             Back to the list
         </a>
     </li>
-    <li>{{ form(delete_form) }}</li>
 </ul>
 {% if is_granted("ROLE_ADMIN") %}
     <a href = "{{ path('product_viewAdmin') }}">Admin View</a>

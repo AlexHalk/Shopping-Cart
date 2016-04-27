@@ -95,8 +95,7 @@ class QuantityController extends Controller
      */
     public function newAction()
     {
-
-        //quantity creation for a product WITHOUT A CART??? -------broken--------------------------------------------------------------------
+//USELESS 'C'RUD FUNCTION-------------------------------------
         $entity = new Quantity();
         $form   = $this->createCreateForm($entity);
 
@@ -148,10 +147,12 @@ class QuantityController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        //---------------THIS MIGHT BE BROKEN!!!!!!------------------------------------------------------------------------------------------
-
         $entity = $em->getRepository('PascalShopTestBundle:Quantity')->find($id);
-        // $cart = $em->getRepository('PascalShopTestBundle:UserCart')->findOneBy(['user' => $this->getUser(), 'submitted' => false]);
+
+        if ($entity->getUsercart()->getSubmitted(true) || ($entity->getProduct() == NULL)) {
+            $this->addFlash('notice', 'You are unable to update a qauntity of a bought product/cart or if a product is null.');
+            return $this->redirect($this->generateUrl('quantity'));
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Quantity entity.');
@@ -160,7 +161,6 @@ class QuantityController extends Controller
         } else {
             $editForm = $this->createEditForm($entity);
             $deleteForm = $this->createDeleteForm($id);
-            // $em->persist($cart);
 
             return array(
                 'entity'      => $entity,
@@ -229,6 +229,8 @@ class QuantityController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+
+//USELESS CRU'D' FUNCTION-------------------------------------
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 

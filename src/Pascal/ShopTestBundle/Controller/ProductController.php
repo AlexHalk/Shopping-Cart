@@ -216,7 +216,7 @@ class ProductController extends Controller {
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('product_view'));
+        return $this->redirect($this->generateUrl('product_viewAdmin'));
     }
 
     /**
