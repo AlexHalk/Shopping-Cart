@@ -53,6 +53,10 @@ class UserCartController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
+
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -98,6 +102,10 @@ class UserCartController extends Controller
         $entity = new UserCart();
         $form   = $this->createCreateForm($entity);
 
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
+
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -116,6 +124,10 @@ class UserCartController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PascalShopTestBundle:UserCart')->find($id);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find UserCart entity.');
@@ -141,6 +153,10 @@ class UserCartController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PascalShopTestBundle:UserCart')->find($id);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find UserCart entity.');
@@ -187,6 +203,10 @@ class UserCartController extends Controller
 
         $entity = $em->getRepository('PascalShopTestBundle:UserCart')->find($id);
 
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find UserCart entity.');
         }
@@ -217,6 +237,10 @@ class UserCartController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

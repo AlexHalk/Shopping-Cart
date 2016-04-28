@@ -98,6 +98,10 @@ class DescriptionController extends Controller
         $entity = new Description();
         $form   = $this->createCreateForm($entity);
 
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
+
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -116,6 +120,10 @@ class DescriptionController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PascalShopTestBundle:Description')->find($id);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Description entity.');
@@ -141,6 +149,10 @@ class DescriptionController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PascalShopTestBundle:Description')->find($id);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Description entity.');
@@ -188,6 +200,10 @@ class DescriptionController extends Controller
 
         $entity = $em->getRepository('PascalShopTestBundle:Description')->find($id);
 
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Description entity.');
         }
@@ -219,6 +235,10 @@ class DescriptionController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access To This Page.');
+        }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

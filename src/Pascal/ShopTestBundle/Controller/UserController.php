@@ -103,6 +103,10 @@ class UserController extends Controller
         // $UserManager = $container->get('fos_user.user_manager');
         // $user = $UserManager->createUser();
 
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access.');
+        }
+
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -124,6 +128,10 @@ class UserController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
+        }
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -148,6 +156,10 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PascalShopTestBundle:User')->find($id);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access.');
+        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
@@ -194,6 +206,10 @@ class UserController extends Controller
 
         $entity = $em->getRepository('PascalShopTestBundle:User')->find($id);
 
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access.');
+        }
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
@@ -228,6 +244,10 @@ class UserController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('PascalShopTestBundle:User')->find($id);
+
+        if ($this->checkAdminLogin()) {
+            throw $this->createNotFoundException('No Access.');
+        }
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find User entity.');
