@@ -27,18 +27,22 @@
 			<tbody>
 			{% for key, quantity in quantities %}  
 					<tr>
-						<td>{{ quantity.product }}</td> <!--Product-->
-						<td>
-							<input id="quantityId_{{ quantity.id }}" class="spinner" value="{{ quantity.quantity }}" style="width:30px">
-						</td> <!--Quantity-->
-						<td>${{ quantity.product.price|default('') }}</td> <!--Price-->   
-						<td>
-							<a href="{{ path('product_remove', {'id': quantity.product.id }) }}">
-								<button name="REMOVE" type="button" class="btn btn-danger" id="removeButton">
-									<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-								</button>
-							</a>
-						</td><!--Remove--> 
+						{% if quantity.product is null %}
+							<td> <p class = "text-center">Product Is No Longer Available.</p> </td>
+						{% else %}
+							<td>{{ quantity.product }}</td> <!--Product-->
+							<td>
+								<input id="quantityId_{{ quantity.id }}" class="spinner" value="{{ quantity.quantity }}" style="width:30px">
+							</td> <!--Quantity-->
+							<td>${{ quantity.product.price|default('') }}</td> <!--Price-->   
+							<td>
+								<a href="{{ path('product_remove', {'id': quantity.product.id }) }}">
+									<button name="REMOVE" type="button" class="btn btn-danger" id="removeButton">
+										<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+									</button>
+								</a>
+							</td><!--Remove--> 
+						{% endif %}
 					</tr>
 				{% endfor %}	  
 			</tbody>

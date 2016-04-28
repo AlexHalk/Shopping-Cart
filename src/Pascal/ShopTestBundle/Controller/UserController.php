@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pascal\ShopTestBundle\Entity\User;
 use Pascal\ShopTestBundle\Form\UserType;
+use FOS\UserBundle\Doctrine\UserManager;
 
 /**
  * User controller.
@@ -98,6 +99,9 @@ class UserController extends Controller
      //create a new user DOES NOTHING ------------------------------------------------------------------------------------------------------FIX
         $entity = new User();
         $form   = $this->createCreateForm($entity);
+
+        // $UserManager = $container->get('fos_user.user_manager');
+        // $user = $UserManager->createUser();
 
         return array(
             'entity' => $entity,

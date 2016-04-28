@@ -246,10 +246,30 @@ class ProductController extends Controller {
         $quantity = 0;
         $prodsInCart = $cart->getQuantities();
 
-        foreach ($prodsInCart as $key => $value) {
-            $prodsInCartCostPrice = $value->getProduct()->getPrice();
-            $prodsInCartQuantity = $value->getQuantity();
-            $totalCostOfAllProducts += $prodsInCartCostPrice * $prodsInCartQuantity;
+        // foreach ($prodsInCart as $key => $value) {
+        foreach ($prodsInCart as $value) {
+            // while ($value->getProduct() == NULL) {
+            //     // $prodsInCartCostPrice = $value->setProduct();
+            //     // $prodsInCartQuantity = $value->getQuantity();
+            //     // $totalCostOfAllProducts += $prodsInCartCostPrice * $prodsInCartQuantity;
+            // } 
+            // dump($value);
+            // dump($value->getProduct());
+            // dump($value->getProduct()->getPrice()); die;
+            //         //deleted product but not quantity so need to set quantity to 0 too...if these are null skip them....
+            // if ($value->getProduct() == NULL) {
+            //     $value->setProduct(0);
+            //     $value->setQuantity(0);
+            //     // dump($value->setProduct()); die;
+            //         // $value->getProduct()->setPrice(0);
+            // } else {
+            //     $prodsInCartCostPrice = $value->getProduct()->getPrice();
+            // }
+            if (!is_null($value->getProduct())) {
+                $prodsInCartCostPrice = $value->getProduct()->getPrice();
+                $prodsInCartQuantity = $value->getQuantity();
+                $totalCostOfAllProducts += $prodsInCartCostPrice * $prodsInCartQuantity;
+            }
         }
         return $totalCostOfAllProducts;
 
@@ -321,16 +341,18 @@ class ProductController extends Controller {
         $getEverythingInCart = $cart->getQuantities();
         $foundProduct = false;
         foreach ($getEverythingInCart as $key => $value) {
-            $getAllProductNamesInCart = $value->getProduct()->getName();
-            $getAllProductsInCartENTITY = $value->getProduct();
-            $getQuantityOfProduct = $value->getQuantity();
-            if ($getAllProductNamesInCart === $productBeingAddedToCart->getName()) {
-                $foundProduct = true;
-                // We found the product! Update the Quantity of the Product in the Cart:
-                $value->setQuantity($getQuantityOfProduct + 1);
-                $em->persist($value);
-                break;
-            } //Ends foreach if
+            if (!is_null($value->getProduct())) {
+                $getAllProductNamesInCart = $value->getProduct()->getName();
+                $getAllProductsInCartENTITY = $value->getProduct();
+                $getQuantityOfProduct = $value->getQuantity();
+                if ($getAllProductNamesInCart === $productBeingAddedToCart->getName()) {
+                    $foundProduct = true;
+                    // We found the product! Update the Quantity of the Product in the Cart:
+                    $value->setQuantity($getQuantityOfProduct + 1);
+                    $em->persist($value);
+                    break;
+                } //Ends foreach if
+            } //Ends is null if
         } //Ends foreach
 
         if (!$foundProduct) {
