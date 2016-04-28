@@ -40,7 +40,7 @@ class UserCart
      * @var ArrayCollection
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userCarts")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $user;
 

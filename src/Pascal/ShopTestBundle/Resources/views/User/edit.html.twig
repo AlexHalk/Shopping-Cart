@@ -5,7 +5,12 @@
 
     {{ form(edit_form) }}
 
-        <ul class="record_actions">
+    <div class = "role_instructions">
+        <p> To Make Admin: <strong> 0|ROLE_ADMIN -- 1|ROLE_USER </strong> </p>
+        <p> To Make Normal: <strong> 0|NORMAL -- 1|ROLE_USER </strong> </p>
+    </div>
+
+<ul class="record_actions">
     <li>
         <a href="{{ path('user') }}">
             Back to the list

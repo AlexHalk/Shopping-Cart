@@ -100,8 +100,8 @@ class UserController extends Controller
         $entity = new User();
         $form   = $this->createCreateForm($entity);
 
-        // $UserManager = $container->get('fos_user.user_manager');
-        // $user = $UserManager->createUser();
+        $UserManager = $this->get('fos_user.user_manager');
+        $user = $UserManager->createUser();
 
         if ($this->checkAdminLogin()) {
             throw $this->createNotFoundException('No Access.');
@@ -164,7 +164,7 @@ class UserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-
+        
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 

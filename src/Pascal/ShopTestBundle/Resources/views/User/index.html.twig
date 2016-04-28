@@ -8,16 +8,16 @@
             <tr>
                 <th>Id</th>
                 <th>User Name</th>
-                <th>Show</th>
-                <th>Edit</th>
+             {#   <th>Show</th> #}
+                <th>Edit</th> 
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td> <a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity.id }}</a> </td>
+                <td> {{ entity.id }} </td>
                 <td> {{ entity.username }} </td>
-                <td> <a href="{{ path('user_show', { 'id': entity.id }) }}">Show</a> </td>
+            {#    <td> <a href="{{ path('user_show', { 'id': entity.id }) }}">Show</a> </td>  #}
                 <td> <a href="{{ path('user_edit', { 'id': entity.id }) }}">Edit</a> </td>
             </tr>
         {% endfor %}
@@ -25,9 +25,9 @@
     </table>
 
     <ul>
-        <li>
+    {#   <li>
             <strong> <a href="{{ path('user_new') }}"> Create a new entry </a> </strong>
-        </li>
+        </li>  #}
         {% if is_granted("ROLE_ADMIN") %}
             <li>
                  <strong> <a href = "{{ path('product_viewAdmin') }}">Admin View</a> </strong>
